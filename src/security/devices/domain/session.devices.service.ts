@@ -1,8 +1,9 @@
 import { DeviceSessionEntity } from "../types/device-session.entity";
 import { SessionDevicesRepository } from "../repositories/session-devices.repository";
+import { WithId } from "mongodb";
 
 export const sessionDevicesService = {
-  async getAllSessions(userId: string): Promise<DeviceSessionEntity[]> {
+  async getAllSessions(userId: string): Promise<WithId<DeviceSessionEntity>[]> {
     return SessionDevicesRepository.findAllByUserId(userId);
   },
   async createSession(

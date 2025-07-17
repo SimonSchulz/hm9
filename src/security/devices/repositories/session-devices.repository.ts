@@ -1,8 +1,11 @@
 import { DeviceSessionEntity } from "../types/device-session.entity";
 import { sessionDevicesCollection } from "../../../db/mongodb";
+import { WithId } from "mongodb";
 
 export const SessionDevicesRepository = {
-  async findAllByUserId(userId: string): Promise<DeviceSessionEntity[]> {
+  async findAllByUserId(
+    userId: string,
+  ): Promise<WithId<DeviceSessionEntity>[]> {
     return sessionDevicesCollection.find({ userId }).toArray();
   },
 
