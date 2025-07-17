@@ -6,6 +6,12 @@ export const sessionDevicesService = {
   async getAllSessions(userId: string): Promise<WithId<DeviceSessionEntity>[]> {
     return SessionDevicesRepository.findAllByUserId(userId);
   },
+
+  async getSessionByDeviceId(
+    deviceId: string,
+  ): Promise<WithId<DeviceSessionEntity> | null> {
+    return SessionDevicesRepository.findSessionByDeviceId(deviceId);
+  },
   async createSession(
     ip: string,
     title: string,
@@ -22,10 +28,7 @@ export const sessionDevicesService = {
     await SessionDevicesRepository.deleteAllExcept(userId, currentDeviceId);
   },
 
-  async deleteSessionByDeviceId(
-    userId: string,
-    deviceId: string,
-  ): Promise<boolean> {
-    return SessionDevicesRepository.deleteByDeviceId(userId, deviceId);
+  async deleteSessionByDeviceId(deviceId: string): Promise<boolean> {
+    return SessionDevicesRepository.deleteByDeviceId(deviceId);
   },
 };

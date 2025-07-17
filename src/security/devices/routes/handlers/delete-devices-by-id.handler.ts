@@ -16,24 +16,26 @@ export async function deleteDevicesByIdHandler(
   try {
     const payload = req.deviceInfo!;
     const deviceIdToDelete = req.params.deviceId;
-
     const userSessions = await sessionDevicesService.getAllSessions(
       payload.userId,
     );
-
     const sessionToDelete = userSessions.find(
       (s) => s.deviceId === deviceIdToDelete,
     );
-    if (!sessionToDelete) throw new NotFoundError("Session not found");
-
+    if (!sessionToDelete) {
+      const sessionExists =
+        await sessionDevicesService.getSessionByDeviceId(deviceIdToDelete);
+      if (sessionExists) {
+        throw new ForbiddenError("Cannot delete session of another user");
+      } else {
+        throw new NotFoundError("Session not found");
+      }
+    }
     if (sessionToDelete.userId !== payload.userId) {
       throw new ForbiddenError("Cannot delete session of another user");
     }
 
-    await sessionDevicesService.deleteSessionByDeviceId(
-      payload.userId,
-      deviceIdToDelete,
-    );
+    await sessionDevicesService.deleteSessionByDeviceId(deviceIdToDelete);
     res.sendStatus(HttpStatus.NoContent);
   } catch (e) {
     next(e);

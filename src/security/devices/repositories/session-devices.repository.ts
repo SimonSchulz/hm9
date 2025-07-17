@@ -8,6 +8,11 @@ export const SessionDevicesRepository = {
   ): Promise<WithId<DeviceSessionEntity>[]> {
     return sessionDevicesCollection.find({ userId }).toArray();
   },
+  async findSessionByDeviceId(
+    deviceId: string,
+  ): Promise<WithId<DeviceSessionEntity> | null> {
+    return sessionDevicesCollection.findOne({ deviceId });
+  },
 
   async create(
     sessionDevice: DeviceSessionEntity,
@@ -16,16 +21,15 @@ export const SessionDevicesRepository = {
     return sessionDevice;
   },
 
-  async deleteAllExcept(userId: string, deviceIdToKeep: string): Promise<void> {
+  async deleteAllExcept(userId: string, deviceId: string): Promise<void> {
     await sessionDevicesCollection.deleteMany({
       userId,
-      deviceId: { $ne: deviceIdToKeep },
+      deviceId: { $ne: deviceId },
     });
   },
 
-  async deleteByDeviceId(userId: string, deviceId: string): Promise<boolean> {
+  async deleteByDeviceId(deviceId: string): Promise<boolean> {
     const result = await sessionDevicesCollection.deleteOne({
-      userId,
       deviceId,
     });
     return result.deletedCount === 1;

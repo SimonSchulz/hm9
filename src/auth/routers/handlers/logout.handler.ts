@@ -3,6 +3,7 @@ import { HttpStatus } from "../../../core/types/http-statuses";
 import { refreshTokenRepository } from "../../Repositories/refresh.token.repo";
 import { AuthorizationError } from "../../../core/utils/app-response-errors";
 import { jwtService } from "../../domain/jwt.service";
+import { sessionDevicesService } from "../../../security/devices/domain/session.devices.service";
 
 export async function logoutHandler(
   req: Request,
@@ -25,7 +26,7 @@ export async function logoutHandler(
     if (!payload) {
       throw new AuthorizationError("Invalid refresh token provided");
     }
-
+    await sessionDevicesService.deleteSessionByDeviceId(payload.deviceId);
     const expiresAt = jwtService.getTokenExpiration(refreshToken);
     if (!expiresAt) {
       throw new Error("Can't extract expiration from refresh token");
