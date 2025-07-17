@@ -8,7 +8,7 @@ export class DeviceSessionEntity {
   lastActiveDate: string;
   expiresAt: string;
 
-  constructor(deviceId: string, userId: string, ip: string, title: string) {
+  constructor(ip: string, title: string, userId: string, deviceId: string) {
     this.deviceId = deviceId;
     this.userId = userId;
     this.ip = ip;
