@@ -1,5 +1,5 @@
 import { Router, Response, Request } from "express";
-import { authMiddleware } from "../../auth/auth-middleware";
+import { authMiddleware } from "../../auth/middlewares/auth-middleware";
 import { usersService } from "../domain/user.service";
 import { HttpStatus } from "../../core/types/http-statuses";
 import { UserViewModel } from "../dto/user.view-model";

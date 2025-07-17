@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {authMiddleware} from "../../auth/auth-middleware";
+import {authMiddleware} from "../../auth/middlewares/auth-middleware";
 import {idValidation, blogIdValidation} from "../../core/utils/params-id.validation";
 import {getBlogsHandler} from "./handlers/get-blogs.handler";
 import {getBlogHandler} from "./handlers/get-blog.handler";

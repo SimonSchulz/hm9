@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {authMiddleware} from "../../auth/auth-middleware";
+import {authMiddleware} from "../../auth/middlewares/auth-middleware";
 import {idValidation, postIdValidation} from "../../core/utils/params-id.validation";
 import {inputValidationResultMiddleware} from "../../core/utils/input-validtion-result.middleware";
 import {postInputDtoValidation} from "../validation/post.input-dto.validation";

@@ -5,12 +5,14 @@ import { SETTINGS } from "../core/setting/setting";
 import {Comment} from "../comments/types/comment";
 import { User } from "../user/domain/user.entity";
 import {RefreshTokenEntity} from "../auth/types/refresh.token.entity";
+import {RequestLog} from "../auth/types/request-log.type";
 
 const BLOGS_COLLECTION_NAME = "blogs";
 const POSTS_COLLECTION_NAME = "posts";
 const USERS_COLLECTION_NAME = "users";
 const COMMENTS_COLLECTION_NAME = "comments";
 const REFRESH_TOKENS_COLLECTION_NAME = "refreshTokens";
+const REQUEST_LOG_COLLECTION_NAME = "requestLogs";
 
 export let client: MongoClient;
 export let blogCollection: Collection<Blog>;
@@ -18,7 +20,7 @@ export let postCollection: Collection<Post>;
 export let userCollection: Collection<User>;
 export let commentCollection: Collection<Comment>;
 export let refreshTokenCollection: Collection<RefreshTokenEntity>;
-
+export let requestLogsCollection: Collection<RequestLog>;
 export async function runDB(url: string): Promise<void> {
   client = new MongoClient(url);
   try {
@@ -29,6 +31,7 @@ export async function runDB(url: string): Promise<void> {
     userCollection = db.collection<User>(USERS_COLLECTION_NAME);
     commentCollection = db.collection<Comment>(COMMENTS_COLLECTION_NAME);
     refreshTokenCollection = db.collection<RefreshTokenEntity>(REFRESH_TOKENS_COLLECTION_NAME);
+    requestLogsCollection = db.collection<RequestLog>(REQUEST_LOG_COLLECTION_NAME);
     await db.command({ ping: 1 });
     console.log("✅ Connected to the database");
   } catch (e) {
