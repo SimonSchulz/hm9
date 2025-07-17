@@ -21,7 +21,7 @@ export const requestLogMiddleware = async (
       date: { $gte: tenSecondsAgo },
     });
     if (count > 5) {
-      res.status(HttpStatus.TooManyRequests).send("Too many requests");
+      return res.status(HttpStatus.TooManyRequests).send("Too many requests");
     }
     next();
   } catch (error) {
