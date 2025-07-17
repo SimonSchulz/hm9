@@ -1,6 +1,7 @@
 import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { SETTINGS } from "../../core/setting/setting";
 import { ValidationError } from "../../core/utils/app-response-errors";
+import { randomUUID } from "crypto";
 
 export const jwtService = {
   async createAccessToken(userId: string): Promise<string> {
@@ -9,7 +10,8 @@ export const jwtService = {
     });
   },
   async createRefreshToken(userId: string): Promise<string> {
-    return jwt.sign({ userId }, SETTINGS.RF_SECRET, {
+    const deviceId = randomUUID();
+    return jwt.sign({ userId, deviceId }, SETTINGS.RF_SECRET, {
       expiresIn: SETTINGS.RF_TIME as number,
     });
   },
@@ -27,9 +29,14 @@ export const jwtService = {
       throw error;
     }
   },
-  async verifyRefreshToken(token: string): Promise<{ userId: string } | null> {
+  async verifyRefreshToken(
+    token: string,
+  ): Promise<{ userId: string; deviceId: string } | null> {
     try {
-      return jwt.verify(token, SETTINGS.RF_SECRET) as { userId: string };
+      return jwt.verify(token, SETTINGS.RF_SECRET) as {
+        userId: string;
+        deviceId: string;
+      };
     } catch (error) {
       if (
         error instanceof TokenExpiredError ||

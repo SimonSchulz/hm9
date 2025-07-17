@@ -5,6 +5,7 @@ import {
   commentCollection,
   postCollection,
   refreshTokenCollection,
+  sessionDevicesCollection,
   userCollection,
 } from "../db/mongodb";
 
@@ -17,6 +18,7 @@ testingRouter.delete("/all-data", async (req: Request, res: Response) => {
     userCollection.deleteMany(),
     commentCollection.deleteMany(),
     refreshTokenCollection.deleteMany(),
+    sessionDevicesCollection.deleteMany(),
   ]);
   res.sendStatus(HttpStatus.NoContent);
 });

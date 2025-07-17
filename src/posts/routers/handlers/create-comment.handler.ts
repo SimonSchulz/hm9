@@ -6,7 +6,7 @@ import {
   NotFoundError,
 } from "../../../core/utils/app-response-errors";
 import { commentsService } from "../../../comments/service/comments.service";
-import { CommentatorInfo } from "../../../comments/types/CommentatorInfo";
+import { RequestDataEntity } from "../../../core/types/request-data.entity";
 import { mapToCommentViewModel } from "../../../comments/helpers/map-to-comment-view-model";
 import { CommentInputDto } from "../../../comments/dto/comment.input-dto";
 
@@ -21,7 +21,7 @@ export async function createCommentByPostIdHandler(
     if (!post) {
       throw new NotFoundError("Post not found");
     }
-    const userInfo: CommentatorInfo | undefined = req.userInfo;
+    const userInfo: RequestDataEntity | undefined = req.userInfo;
     if (!userInfo) throw new AuthorizationError();
     let comment = await commentsService.create(req.body, userInfo, postId);
     const commentViewModel = mapToCommentViewModel(comment);

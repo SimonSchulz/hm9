@@ -3,7 +3,7 @@ import { HttpStatus } from "../../../core/types/http-statuses";
 import { LoginDto } from "../../dto/login.dto";
 import { authService } from "../../domain/auth.service";
 import { AuthorizationError } from "../../../core/utils/app-response-errors";
-import { LoginSuccessViewModel } from "../../types/LoginSuccessViewModel";
+import { LoginSuccessViewModel } from "../../types/login-success-view-model";
 import { SETTINGS } from "../../../core/setting/setting";
 
 export async function authLoginHandler(

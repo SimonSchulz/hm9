@@ -1,9 +1,11 @@
-import { CommentatorInfo } from "../../comments/types/CommentatorInfo";
+import { RequestDataEntity } from "./request-data.entity";
+import { DeviceInfo } from "./request-data.entity";
 
 declare global {
   namespace Express {
     interface Request {
-      userInfo?: CommentatorInfo;
+      userInfo?: RequestDataEntity;
+      deviceInfo?: DeviceInfo;
     }
   }
 }

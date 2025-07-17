@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { HttpStatus } from "../../../core/types/http-statuses";
-import { LoginSuccessViewModel } from "../../types/LoginSuccessViewModel";
+import { LoginSuccessViewModel } from "../../types/login-success-view-model";
 import { SETTINGS } from "../../../core/setting/setting";
 import { refreshService } from "../../domain/refresh.token.service";
 import { AuthorizationError } from "../../../core/utils/app-response-errors";

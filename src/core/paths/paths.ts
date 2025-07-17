@@ -4,3 +4,4 @@ export const TESTING_PATH = "/hometask_09/api/testing";
 export const AUTH_PATH = "/hometask_09/api/auth";
 export const USER_PATH = "/hometask_09/api/users";
 export const COMMENT_PATH = "/hometask_09/api/comments";
+export const SESSION_DEVICES_PATH = "/hometask_09/api/security/devices";

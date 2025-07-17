@@ -1,8 +1,8 @@
-import {CommentatorInfo} from "./CommentatorInfo";
+import { RequestDataEntity } from "../../core/types/request-data.entity";
 
 export type Comment = {
-    content: string;
-    commentatorInfo: CommentatorInfo
-    createdAt: string;
-    postId: string;
-}
+  content: string;
+  commentatorInfo: RequestDataEntity;
+  createdAt: string;
+  postId: string;
+};
