@@ -12,6 +12,10 @@ export const sessionDevicesService = {
   ): Promise<WithId<DeviceSessionEntity> | null> {
     return SessionDevicesRepository.findSessionByDeviceId(deviceId);
   },
+
+  async updateLastActiveDate(deviceId: string) {
+    await SessionDevicesRepository.updateLastActiveDate(deviceId);
+  },
   async createSession(
     ip: string,
     title: string,

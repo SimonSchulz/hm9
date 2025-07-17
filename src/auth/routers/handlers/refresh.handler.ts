@@ -5,6 +5,8 @@ import { SETTINGS } from "../../../core/setting/setting";
 import { refreshService } from "../../domain/refresh.token.service";
 import { AuthorizationError } from "../../../core/utils/app-response-errors";
 import { refreshTokenRepository } from "../../Repositories/refresh.token.repo";
+import { jwtService } from "../../domain/jwt.service";
+import { sessionDevicesService } from "../../../security/devices/domain/session.devices.service";
 
 export async function refreshTokenHandler(
   req: Request,
@@ -24,7 +26,10 @@ export async function refreshTokenHandler(
     }
 
     const tokens = await refreshService.refreshToken(oldRefreshToken);
-
+    const payload = await jwtService.verifyRefreshToken(tokens.refreshToken);
+    if (!payload)
+      throw new AuthorizationError("Refresh token not found or already used");
+    await sessionDevicesService.updateLastActiveDate(payload.deviceId);
     res
       .cookie("refreshToken", tokens.refreshToken, {
         httpOnly: true,

@@ -20,7 +20,12 @@ export const SessionDevicesRepository = {
     await sessionDevicesCollection.insertOne(sessionDevice);
     return sessionDevice;
   },
-
+  async updateLastActiveDate(deviceId: string) {
+    await sessionDevicesCollection.updateOne(
+      { deviceId },
+      { $set: { lastActiveDate: new Date().toISOString() } },
+    );
+  },
   async deleteAllExcept(userId: string, deviceId: string): Promise<void> {
     await sessionDevicesCollection.deleteMany({
       userId,
