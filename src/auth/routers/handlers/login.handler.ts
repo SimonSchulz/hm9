@@ -5,6 +5,8 @@ import { authService } from "../../domain/auth.service";
 import { AuthorizationError } from "../../../core/utils/app-response-errors";
 import { LoginSuccessViewModel } from "../../types/login-success-view-model";
 import { SETTINGS } from "../../../core/setting/setting";
+import { sessionDevicesService } from "../../../security/devices/domain/session.devices.service";
+import { jwtService } from "../../domain/jwt.service";
 
 export async function authLoginHandler(
   req: Request<{}, {}, LoginDto>,
@@ -18,6 +20,17 @@ export async function authLoginHandler(
       throw new AuthorizationError("Wrong credentials");
     }
     const { accessToken, refreshToken } = tokens;
+    const ip = req.ip as string;
+    const title: string =
+      req.headers?.["user-agent"]?.toString() || loginOrEmail;
+    const payload = await jwtService.verifyRefreshToken(refreshToken);
+    if (!payload) throw new AuthorizationError();
+    await sessionDevicesService.createSession(
+      ip,
+      title,
+      payload.userId,
+      payload.deviceId,
+    );
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,

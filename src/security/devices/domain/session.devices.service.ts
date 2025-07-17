@@ -5,7 +5,15 @@ export const sessionDevicesService = {
   async getAllSessions(userId: string): Promise<DeviceSessionEntity[]> {
     return SessionDevicesRepository.findAllByUserId(userId);
   },
-
+  async createSession(
+    ip: string,
+    title: string,
+    userId: string,
+    deviceId: string,
+  ): Promise<DeviceSessionEntity> {
+    const session = new DeviceSessionEntity(ip, title, userId, deviceId);
+    return SessionDevicesRepository.create(session);
+  },
   async deleteOtherSessions(
     userId: string,
     currentDeviceId: string,
