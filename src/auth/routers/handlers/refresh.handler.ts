@@ -27,7 +27,10 @@ export async function refreshTokenHandler(
     const payload = await jwtService.verifyRefreshToken(oldRefreshToken);
     if (!payload)
       throw new AuthorizationError("Refresh token not found or already used");
-    const tokens = await refreshService.refreshToken(oldRefreshToken);
+    const tokens = await refreshService.refreshToken(
+      oldRefreshToken,
+      payload.deviceId,
+    );
     await sessionDevicesService.updateLastActiveDate(payload.deviceId);
     res
       .cookie("refreshToken", tokens.refreshToken, {

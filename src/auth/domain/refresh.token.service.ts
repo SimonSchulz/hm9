@@ -3,7 +3,7 @@ import { jwtService } from "./jwt.service";
 import { AuthorizationError } from "../../core/utils/app-response-errors";
 
 export const refreshService = {
-  async refreshToken(oldRefreshToken: string) {
+  async refreshToken(oldRefreshToken: string, deviceId: string) {
     if (!oldRefreshToken) {
       throw new AuthorizationError("No refresh token provided");
     }
@@ -32,7 +32,10 @@ export const refreshService = {
     });
 
     const newAccessToken = await jwtService.createAccessToken(userId);
-    const newRefreshToken = await jwtService.createRefreshToken(userId);
+    const newRefreshToken = await jwtService.createRefreshToken(
+      userId,
+      deviceId,
+    );
     const newExpiresAt = jwtService.getTokenExpiration(newRefreshToken);
 
     if (!newExpiresAt) {

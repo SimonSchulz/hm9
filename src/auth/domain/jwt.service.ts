@@ -9,9 +9,9 @@ export const jwtService = {
       expiresIn: SETTINGS.AC_TIME as number,
     });
   },
-  async createRefreshToken(userId: string): Promise<string> {
-    const deviceId = randomUUID();
-    return jwt.sign({ userId, deviceId }, SETTINGS.RF_SECRET, {
+  async createRefreshToken(userId: string, deviceId?: string): Promise<string> {
+    const finalDeviceId = deviceId ?? randomUUID(); // если deviceId не передан — создаём новый
+    return jwt.sign({ userId, deviceId: finalDeviceId }, SETTINGS.RF_SECRET, {
       expiresIn: SETTINGS.RF_TIME as number,
     });
   },
