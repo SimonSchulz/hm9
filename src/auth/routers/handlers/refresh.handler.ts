@@ -24,11 +24,10 @@ export async function refreshTokenHandler(
     if (isBlacklisted) {
       throw new AuthorizationError("Refresh token not found or already used");
     }
-
-    const tokens = await refreshService.refreshToken(oldRefreshToken);
-    const payload = await jwtService.verifyRefreshToken(tokens.refreshToken);
+    const payload = await jwtService.verifyRefreshToken(oldRefreshToken);
     if (!payload)
       throw new AuthorizationError("Refresh token not found or already used");
+    const tokens = await refreshService.refreshToken(oldRefreshToken);
     await sessionDevicesService.updateLastActiveDate(payload.deviceId);
     res
       .cookie("refreshToken", tokens.refreshToken, {
