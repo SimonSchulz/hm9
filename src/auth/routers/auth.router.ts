@@ -14,11 +14,13 @@ import { codeValidation } from "../../user/validation/confirm-code.validation";
 import { emailResendValidation } from "../../user/validation/email.resend.validation";
 import { refreshTokenHandler } from "./handlers/refresh.handler";
 import { logoutHandler } from "./handlers/logout.handler";
+import { requestLogMiddleware } from "../middlewares/request-log.middleware";
 
 export const authRouter = Router();
 
 authRouter.post(
   "/login",
+  requestLogMiddleware,
   passwordValidation,
   loginOrEmailValidation,
   inputValidationResultMiddleware,
@@ -26,12 +28,14 @@ authRouter.post(
 );
 authRouter.post(
   "/registration-confirmation",
+  requestLogMiddleware,
   codeValidation,
   inputValidationResultMiddleware,
   confirmRegistration,
 );
 authRouter.post(
   "/registration",
+  requestLogMiddleware,
   passwordValidation,
   loginValidation,
   emailValidation,
@@ -40,6 +44,7 @@ authRouter.post(
 );
 authRouter.post(
   "/registration-email-resending",
+  requestLogMiddleware,
   emailResendValidation,
   inputValidationResultMiddleware,
   resendConfirmationEmail,
