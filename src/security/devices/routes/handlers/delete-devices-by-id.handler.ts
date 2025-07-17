@@ -7,6 +7,7 @@ import {
 import { jwtService } from "../../../../auth/domain/jwt.service";
 import { sessionDevicesService } from "../../domain/session.devices.service";
 import { HttpStatus } from "../../../../core/types/http-statuses";
+import { refreshTokenRepository } from "../../../../auth/Repositories/refresh.token.repo";
 
 export async function deleteDevicesByIdHandler(
   req: Request,
@@ -14,6 +15,7 @@ export async function deleteDevicesByIdHandler(
   next: NextFunction,
 ) {
   try {
+    const refreshToken: string = req.cookies.refreshToken;
     const payload = req.deviceInfo!;
     const deviceIdToDelete = req.params.deviceId;
     const userSessions = await sessionDevicesService.getAllSessions(
@@ -34,8 +36,13 @@ export async function deleteDevicesByIdHandler(
     if (sessionToDelete.userId !== payload.userId) {
       throw new ForbiddenError("Cannot delete session of another user");
     }
-
+    const expiresAt = jwtService.getTokenExpiration(refreshToken);
     await sessionDevicesService.deleteSessionByDeviceId(deviceIdToDelete);
+    await refreshTokenRepository.saveInvalidToken({
+      userId: payload.userId,
+      token: refreshToken,
+      expiresAt,
+    });
     res.sendStatus(HttpStatus.NoContent);
   } catch (e) {
     next(e);
