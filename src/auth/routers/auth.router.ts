@@ -15,6 +15,7 @@ import { emailResendValidation } from "../../user/validation/email.resend.valida
 import { refreshTokenHandler } from "./handlers/refresh.handler";
 import { logoutHandler } from "./handlers/logout.handler";
 import { requestLogMiddleware } from "../middlewares/request-log.middleware";
+import { refreshTokenGuard } from "./guards/refresh.token.guard";
 
 export const authRouter = Router();
 
@@ -50,5 +51,5 @@ authRouter.post(
   resendConfirmationEmail,
 );
 authRouter.get("/me", accessTokenGuard, getUserDataHandler);
-authRouter.post("/refresh-token", refreshTokenHandler);
+authRouter.post("/refresh-token", refreshTokenGuard, refreshTokenHandler);
 authRouter.post("/logout", logoutHandler);

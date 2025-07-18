@@ -14,21 +14,10 @@ export async function refreshTokenHandler(
   next: NextFunction,
 ) {
   try {
-    const oldRefreshToken = req.cookies.refreshToken;
-
-    if (!oldRefreshToken) {
-      throw new AuthorizationError("No refresh token provided");
-    }
-    const isBlacklisted =
-      await refreshTokenRepository.isTokenInvalidated(oldRefreshToken);
-    if (isBlacklisted) {
-      throw new AuthorizationError("Refresh token not found or already used");
-    }
-    const payload = await jwtService.verifyRefreshToken(oldRefreshToken);
-    if (!payload)
-      throw new AuthorizationError("Refresh token not found or already used");
+    const refreshToken = req.cookies.refreshToken;
+    const payload = req.deviceInfo!;
     const tokens = await refreshService.refreshToken(
-      oldRefreshToken,
+      refreshToken,
       payload.deviceId,
     );
     await sessionDevicesService.updateLastActiveDate(payload.deviceId);
