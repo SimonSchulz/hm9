@@ -21,4 +21,7 @@ export const refreshTokenRepository = {
   ): Promise<{ token: string } | null> {
     return refreshTokenCollection.findOne({ deviceId });
   },
+  async findTokensByDeviceId(deviceId: string) {
+    return refreshTokenCollection.find({ deviceId });
+  },
 };

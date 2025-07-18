@@ -1,8 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import {
-  ForbiddenError,
-  NotFoundError,
-} from "../../../../core/utils/app-response-errors";
 import { sessionDevicesService } from "../../domain/session.devices.service";
 import { HttpStatus } from "../../../../core/types/http-statuses";
 
