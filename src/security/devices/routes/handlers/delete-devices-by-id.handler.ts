@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import {
-  AuthorizationError,
   ForbiddenError,
   NotFoundError,
 } from "../../../../core/utils/app-response-errors";
