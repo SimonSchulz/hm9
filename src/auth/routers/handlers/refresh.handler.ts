@@ -3,6 +3,7 @@ import { HttpStatus } from "../../../core/types/http-statuses";
 import { LoginSuccessViewModel } from "../../types/login-success-view-model";
 import { sessionDevicesService } from "../../../security/devices/domain/session.devices.service";
 import { refreshService } from "../../domain/refresh.token.service";
+import { jwtService } from "../../domain/jwt.service";
 
 export async function refreshTokenHandler(
   req: Request,
@@ -16,7 +17,8 @@ export async function refreshTokenHandler(
       refreshToken,
       payload.deviceId,
     );
-    await sessionDevicesService.updateLastActiveDate(payload.deviceId);
+    const iat = jwtService.getTokenIssuedAt(refreshToken).toISOString();
+    await sessionDevicesService.updateLastActiveDate(payload.deviceId, iat);
     res
       .cookie("refreshToken", tokens.refreshToken, {
         httpOnly: true,

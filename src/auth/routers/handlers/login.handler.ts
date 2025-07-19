@@ -24,11 +24,13 @@ export async function authLoginHandler(
       req.headers?.["user-agent"]?.toString() || loginOrEmail;
     const payload = await jwtService.verifyRefreshToken(refreshToken);
     if (!payload) throw new AuthorizationError();
+    const refreshIat = jwtService.getTokenIssuedAt(refreshToken);
     await sessionDevicesService.createSession(
       ip,
       title,
       payload.userId,
       payload.deviceId,
+      refreshIat.toISOString(),
     );
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,

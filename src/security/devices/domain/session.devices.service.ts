@@ -14,16 +14,17 @@ export const sessionDevicesService = {
     return SessionDevicesQueryRepository.findSessionByDeviceId(deviceId);
   },
 
-  async updateLastActiveDate(deviceId: string) {
-    await SessionDevicesRepository.updateLastActiveDate(deviceId);
+  async updateLastActiveDate(deviceId: string, iat: string) {
+    await SessionDevicesRepository.updateLastActiveDate(deviceId, iat);
   },
   async createSession(
     ip: string,
     title: string,
     userId: string,
     deviceId: string,
+    iat: string,
   ): Promise<DeviceSessionEntity> {
-    const session = new DeviceSessionEntity(ip, title, userId, deviceId);
+    const session = new DeviceSessionEntity(ip, title, userId, deviceId, iat);
     return SessionDevicesRepository.create(session);
   },
   async deleteOtherSessions(
