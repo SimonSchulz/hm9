@@ -18,7 +18,7 @@ export async function refreshTokenGuard(
   const tokenIat = jwtService.getTokenIssuedAt(refreshToken);
   if (!session) throw new AuthorizationError();
   const tokenIssuedAt = tokenIat.getTime();
-  const sessionCreatedAt = new Date(session.lastActiveDate).getTime();
+  const sessionCreatedAt = new Date(session.iat).getTime();
 
   if (tokenIssuedAt !== sessionCreatedAt) {
     throw new AuthorizationError("Stale or reused refresh token");
