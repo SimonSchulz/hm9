@@ -5,7 +5,7 @@ export class DeviceSessionEntity {
   userId: string;
   ip: string;
   title: string;
-  iat: string;
+  lastActiveDate: string;
   expiresAt: string;
 
   constructor(
@@ -19,7 +19,7 @@ export class DeviceSessionEntity {
     this.userId = userId;
     this.ip = ip;
     this.title = title;
-    this.iat = iat;
+    this.lastActiveDate = iat;
     const date = new Date(iat);
     this.expiresAt = addSeconds(date, 20).toISOString();
   }

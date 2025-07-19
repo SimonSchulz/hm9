@@ -11,7 +11,7 @@ export const SessionDevicesRepository = {
   async updateLastActiveDate(deviceId: string, iat: string) {
     await sessionDevicesCollection.updateOne(
       { deviceId },
-      { $set: { iat: iat } },
+      { $set: { lastActiveDate: iat } },
     );
   },
   async deleteAllExcept(userId: string, deviceId: string): Promise<void> {
