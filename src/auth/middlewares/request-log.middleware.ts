@@ -17,7 +17,7 @@ export const requestLogMiddleware = (
     const tenSecondsAgo = now - 10_000;
 
     const previous = requestsMap.get(key) || [];
-    const recent = previous.filter((ts) => ts > tenSecondsAgo);
+    const recent = previous.filter((ts) => ts >= tenSecondsAgo);
 
     if (recent.length >= 5) {
       return res.sendStatus(HttpStatus.TooManyRequests); // 429
