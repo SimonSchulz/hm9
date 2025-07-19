@@ -20,9 +20,10 @@ export const requestLogMiddleware = async (
     });
     if (count >= 5) {
       return res.status(HttpStatus.TooManyRequests).send("Too many requests");
+    } else {
+      await requestLogsCollection.insertOne({ ip, url, date: now });
+      next();
     }
-    await requestLogsCollection.insertOne({ ip, url, date: now });
-    next();
   } catch (error) {
     next();
   }
