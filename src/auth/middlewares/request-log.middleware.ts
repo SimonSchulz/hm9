@@ -26,6 +26,6 @@ export const requestLogMiddleware = async (
       next();
     }
   } catch (error) {
-    next();
+    next(error);
   }
 };
