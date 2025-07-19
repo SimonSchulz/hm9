@@ -32,8 +32,11 @@ export async function resendConfirmationEmail(
     const newCode = crypto.randomUUID();
     const newExpiration = addMinutes(new Date(), 10).toISOString();
 
-    await usersRepository.updateConfirmation(user._id.toString(), newCode, newExpiration);
-    await new Promise(r => setTimeout(r, 1500));
+    await usersRepository.updateConfirmation(
+      user._id.toString(),
+      newCode,
+      newExpiration,
+    );
     await nodemailerService.sendEmail(
       user.email,
       newCode,
