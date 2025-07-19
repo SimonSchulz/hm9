@@ -13,8 +13,6 @@ export const requestLogMiddleware = async (
     const now = new Date();
     const tenSecondsAgo = new Date(now.getTime() - 10 * 1000);
 
-    await requestLogsCollection.insertOne({ ip, url, date: now });
-
     const count = await requestLogsCollection.countDocuments({
       ip,
       url,
@@ -22,7 +20,9 @@ export const requestLogMiddleware = async (
     });
     if (count > 5) {
       res.sendStatus(HttpStatus.TooManyRequests);
+      return;
     } else {
+      await requestLogsCollection.insertOne({ ip, url, date: now });
       next();
     }
   } catch (error) {
