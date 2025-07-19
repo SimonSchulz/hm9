@@ -21,7 +21,8 @@ export const requestLogMiddleware = (
     const recentTimestamps = timestamps.filter((ts) => ts >= tenSecondsAgo);
 
     if (recentTimestamps.length >= 5) {
-      return res.sendStatus(HttpStatus.TooManyRequests); // 429
+      res.sendStatus(HttpStatus.TooManyRequests);
+      return;
     }
     recentTimestamps.push(now);
     requestsMap.set(key, recentTimestamps);
