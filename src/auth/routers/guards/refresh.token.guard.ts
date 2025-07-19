@@ -15,7 +15,14 @@ export async function refreshTokenGuard(
   const session = await SessionDevicesQueryRepository.findSessionByDeviceId(
     payload.deviceId,
   );
+  const tokenIat = jwtService.getTokenIssuedAt(refreshToken);
   if (!session) throw new AuthorizationError();
+  const tokenIssuedAt = tokenIat.getTime();
+  const sessionCreatedAt = new Date(session.lastActiveDate).getTime();
+
+  if (tokenIssuedAt !== sessionCreatedAt) {
+    throw new AuthorizationError("Stale or reused refresh token");
+  }
   req.deviceInfo = {
     userId: payload.userId,
     deviceId: payload.deviceId,

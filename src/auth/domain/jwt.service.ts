@@ -53,4 +53,10 @@ export const jwtService = {
       throw new ValidationError("Token expiration does not match");
     return new Date(decoded.exp * 1000).toISOString();
   },
+  getTokenIssuedAt(token: string): Date {
+    const decoded = jwt.decode(token) as { iat?: number } | null;
+    if (!decoded || !decoded.iat)
+      throw new ValidationError("Token issuedAt does not match");
+    return new Date(decoded.iat * 1000);
+  },
 };
