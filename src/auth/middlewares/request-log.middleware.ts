@@ -16,9 +16,9 @@ export const requestLogMiddleware = async (
     const count = await requestLogsCollection.countDocuments({
       ip,
       url,
-      date: { $gte: tenSecondsAgo },
+      date: { $gt: tenSecondsAgo },
     });
-    if (count >= 4) {
+    if (count >= 5) {
       return res.status(HttpStatus.TooManyRequests).send("Too many requests");
     }
     await requestLogsCollection.insertOne({ ip, url, date: now });
