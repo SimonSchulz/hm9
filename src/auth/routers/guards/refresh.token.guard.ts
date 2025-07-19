@@ -7,25 +7,29 @@ export async function refreshTokenGuard(
   res: Response,
   next: NextFunction,
 ) {
-  const refreshToken = req.cookies?.refreshToken;
-  if (!refreshToken) throw new AuthorizationError();
+  try {
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) throw new AuthorizationError();
 
-  const payload = await jwtService.verifyRefreshToken(refreshToken);
-  if (!payload) throw new AuthorizationError();
-  const session = await SessionDevicesQueryRepository.findSessionByDeviceId(
-    payload.deviceId,
-  );
-  if (!session) throw new AuthorizationError();
-  const tokenIat = jwtService.getTokenIssuedAt(refreshToken);
-  const tokenIssuedAt = tokenIat.getTime();
-  const sessionCreatedAt = new Date(session.lastActiveDate).getTime();
+    const payload = await jwtService.verifyRefreshToken(refreshToken);
+    if (!payload) throw new AuthorizationError();
+    const session = await SessionDevicesQueryRepository.findSessionByDeviceId(
+      payload.deviceId,
+    );
+    if (!session) throw new AuthorizationError();
+    const tokenIat = jwtService.getTokenIssuedAt(refreshToken);
+    const tokenIssuedAt = tokenIat.getTime();
+    const sessionCreatedAt = new Date(session.lastActiveDate).getTime();
 
-  if (tokenIssuedAt !== sessionCreatedAt) {
-    throw new AuthorizationError("Stale or reused refresh token");
+    if (tokenIssuedAt !== sessionCreatedAt) {
+      throw new AuthorizationError("Stale or reused refresh token");
+    }
+    req.deviceInfo = {
+      userId: payload.userId,
+      deviceId: payload.deviceId,
+    };
+    next();
+  } catch (err) {
+    next(err);
   }
-  req.deviceInfo = {
-    userId: payload.userId,
-    deviceId: payload.deviceId,
-  };
-  next();
 }

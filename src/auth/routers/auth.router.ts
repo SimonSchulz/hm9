@@ -52,4 +52,4 @@ authRouter.post(
 );
 authRouter.get("/me", accessTokenGuard, getUserDataHandler);
 authRouter.post("/refresh-token", refreshTokenGuard, refreshTokenHandler);
-authRouter.post("/logout", logoutHandler);
+authRouter.post("/logout", refreshTokenGuard, logoutHandler);
