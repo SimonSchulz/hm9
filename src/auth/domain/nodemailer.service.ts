@@ -8,7 +8,10 @@ export const nodemailerService = {
     template: (code: string) => string,
   ): Promise<void> {
     let transporter = nodemailer.createTransport({
-      service: "yandex",
+      //service: 'gmail',
+      host: "smtp.yandex.ru",
+      port: 465,
+      secure: true,
       auth: {
         user: SETTINGS.EMAIL,
         pass: SETTINGS.EMAIL_PASS,

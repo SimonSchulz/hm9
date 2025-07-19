@@ -10,6 +10,6 @@ export const SETTINGS = {
   RF_TIME: process.env.RF_TIME || 20,
   //EMAIL: "testovichtest107@gmail.com",
   //EMAIL_PASS: "typj whjv vrcg aksj",
-  EMAIL: " testovich43@yandex.com",
-  EMAIL_PASS: "gnxofwxetibnmuqf",
+  EMAIL: "testovich43@yandex.com",
+  EMAIL_PASS: "iwlvlowamkbiqpat",
 };
