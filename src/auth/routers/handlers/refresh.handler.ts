@@ -11,12 +11,8 @@ export async function refreshTokenHandler(
   next: NextFunction,
 ) {
   try {
-    const refreshToken = req.cookies.refreshToken;
     const payload = req.deviceInfo!;
-    const tokens = await refreshService.refreshToken(
-      refreshToken,
-      payload.deviceId,
-    );
+    const tokens = await refreshService.refreshToken(payload.deviceId);
     res
       .cookie("refreshToken", tokens.refreshToken, {
         httpOnly: true,

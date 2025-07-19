@@ -4,25 +4,14 @@ import { SessionDevicesQueryRepository } from "../../security/devices/repositori
 import { sessionDevicesService } from "../../security/devices/domain/session.devices.service";
 
 export const refreshService = {
-  async refreshToken(oldRefreshToken: string, deviceId: string) {
-    if (!oldRefreshToken) {
-      throw new AuthorizationError("No refresh token provided");
+  async refreshToken(deviceId: string) {
+    if (!deviceId) {
+      throw new AuthorizationError("Device ID is required");
     }
-
-    const payload = await jwtService.verifyRefreshToken(oldRefreshToken);
-    if (!payload) {
-      throw new AuthorizationError("Invalid or expired refresh token");
-    }
-    const session = SessionDevicesQueryRepository.findSessionByDeviceId(
-      payload.deviceId,
-    );
+    const session =
+      await SessionDevicesQueryRepository.findSessionByDeviceId(deviceId);
     if (!session) throw new AuthorizationError();
-    const userId = payload.userId;
-    const oldExpiresAt = jwtService.getTokenExpiration(oldRefreshToken);
-    if (!oldExpiresAt) {
-      throw new Error("Can't extract expiration from old refresh token");
-    }
-
+    const userId = session.userId;
     const newAccessToken = await jwtService.createAccessToken(userId);
     const newRefreshToken = await jwtService.createRefreshToken(
       userId,
@@ -30,7 +19,7 @@ export const refreshService = {
     );
     const iat = jwtService.getTokenIssuedAt(newRefreshToken).toISOString();
     if (!iat) throw new Error("Can't extract issuedAt from new refresh token");
-    await sessionDevicesService.updateLastActiveDate(payload.deviceId, iat);
+    await sessionDevicesService.updateLastActiveDate(deviceId, iat);
     return {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,

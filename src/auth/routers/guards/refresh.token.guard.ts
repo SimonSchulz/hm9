@@ -15,8 +15,8 @@ export async function refreshTokenGuard(
   const session = await SessionDevicesQueryRepository.findSessionByDeviceId(
     payload.deviceId,
   );
-  const tokenIat = jwtService.getTokenIssuedAt(refreshToken);
   if (!session) throw new AuthorizationError();
+  const tokenIat = jwtService.getTokenIssuedAt(refreshToken);
   const tokenIssuedAt = tokenIat.getTime();
   const sessionCreatedAt = new Date(session.lastActiveDate).getTime();
 
