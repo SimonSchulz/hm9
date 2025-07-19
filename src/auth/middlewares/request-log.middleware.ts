@@ -10,25 +10,23 @@ export const requestLogMiddleware = (
 ) => {
   try {
     const ip = req.ip || "";
-    const url = req.originalUrl; // строго originalUrl
+    const url = req.originalUrl; // используем originalUrl!
     const key = `${ip}:${url}`;
 
     const now = Date.now();
     const tenSecondsAgo = now - 10_000;
 
-    const timestamps = requestsMap.get(key) || [];
+    const previous = requestsMap.get(key) || [];
+    const recent = previous.filter((ts) => ts > tenSecondsAgo);
 
-    const recentTimestamps = timestamps.filter((ts) => ts > tenSecondsAgo);
-
-    if (recentTimestamps.length >= 5) {
-      return res.sendStatus(HttpStatus.TooManyRequests);
+    if (recent.length >= 5) {
+      return res.sendStatus(HttpStatus.TooManyRequests); // 429
     }
 
-    recentTimestamps.push(now);
-    requestsMap.set(key, recentTimestamps);
-
+    recent.push(now);
+    requestsMap.set(key, recent);
     next();
-  } catch (e) {
-    next(e);
+  } catch (err) {
+    next(err);
   }
 };
