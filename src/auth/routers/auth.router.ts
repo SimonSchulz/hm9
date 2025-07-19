@@ -36,11 +36,11 @@ authRouter.post(
 );
 authRouter.post(
   "/registration",
+  requestLogMiddleware,
   passwordValidation,
   loginValidation,
   emailValidation,
   inputValidationResultMiddleware,
-  requestLogMiddleware,
   registrationHandler,
 );
 authRouter.post(
