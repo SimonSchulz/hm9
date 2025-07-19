@@ -8,14 +8,14 @@ export const nodemailerService = {
     template: (code: string) => string,
   ): Promise<void> {
     let transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "yandex",
       auth: {
         user: SETTINGS.EMAIL,
         pass: SETTINGS.EMAIL_PASS,
       },
       tls: {
         rejectUnauthorized: false,
-      }
+      },
     });
     await transporter.sendMail({
       from: `"Blogs platform" <${SETTINGS.EMAIL}>`,
