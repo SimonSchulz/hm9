@@ -5,7 +5,6 @@ import {
 } from "../../../../core/utils/app-response-errors";
 import { sessionDevicesService } from "../../domain/session.devices.service";
 import { HttpStatus } from "../../../../core/types/http-statuses";
-import { refreshTokenRepository } from "../../../../auth/Repositories/refresh.token.repo";
 
 export async function deleteDevicesByIdHandler(
   req: Request,
@@ -18,7 +17,6 @@ export async function deleteDevicesByIdHandler(
 
     const sessionToDelete =
       await sessionDevicesService.getSessionByDeviceId(deviceIdToDelete);
-
     if (!sessionToDelete) {
       throw new NotFoundError("Session not found");
     }
@@ -28,17 +26,6 @@ export async function deleteDevicesByIdHandler(
     }
 
     await sessionDevicesService.deleteSessionByDeviceId(deviceIdToDelete);
-
-    const tokens =
-      await refreshTokenRepository.findTokensByDeviceId(deviceIdToDelete);
-
-    for await (const token of tokens) {
-      await refreshTokenRepository.saveInvalidToken({
-        userId: token.userId,
-        token: token.token,
-        expiresAt: token.expiresAt,
-      });
-    }
 
     res.sendStatus(HttpStatus.NoContent); // 204
   } catch (e) {
