@@ -19,7 +19,8 @@ export const requestLogMiddleware = async (
       date: { $gt: tenSecondsAgo },
     });
     if (count >= 5) {
-      return res.status(HttpStatus.TooManyRequests).send("Too many requests");
+      res.status(HttpStatus.TooManyRequests).send("Too many requests");
+      return;
     } else {
       await requestLogsCollection.insertOne({ ip, url, date: now });
       next();
