@@ -20,6 +20,7 @@ export const requestLogMiddleware = async (
     });
     if (count >= 5) {
       res.sendStatus(HttpStatus.TooManyRequests);
+      await requestLogsCollection.deleteMany({ url });
       return;
     } else {
       await requestLogsCollection.insertOne({ ip, url, date: now });
