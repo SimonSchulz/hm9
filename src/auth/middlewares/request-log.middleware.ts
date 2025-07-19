@@ -1,29 +1,34 @@
 import { Request, Response, NextFunction } from "express";
-import { requestLogsCollection } from "../../db/mongodb";
 import { HttpStatus } from "../../core/types/http-statuses";
 
-export const requestLogMiddleware = async (
+const requestsMap = new Map<string, number[]>();
+
+export const requestLogMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const ip = req.ip?.toString() || "";
-    const url = req.originalUrl;
-    const now = new Date();
-    const tenSecondsAgo = new Date(now.getTime() - 10 * 1000);
-    await requestLogsCollection.insertOne({ ip, url, date: now });
-    const count = await requestLogsCollection.countDocuments({
-      ip,
-      url,
-      date: { $gte: tenSecondsAgo },
-    });
-    if (count > 5) {
-      res.sendStatus(HttpStatus.TooManyRequests);
-      return;
+    const ip = req.ip || "";
+    const url = req.originalUrl; // строго originalUrl
+    const key = `${ip}:${url}`;
+
+    const now = Date.now();
+    const tenSecondsAgo = now - 10_000;
+
+    const timestamps = requestsMap.get(key) || [];
+
+    const recentTimestamps = timestamps.filter((ts) => ts > tenSecondsAgo);
+
+    if (recentTimestamps.length >= 5) {
+      return res.sendStatus(HttpStatus.TooManyRequests);
     }
+
+    recentTimestamps.push(now);
+    requestsMap.set(key, recentTimestamps);
+
     next();
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    next(e);
   }
 };
