@@ -16,10 +16,10 @@ export const requestLogMiddleware = async (
     const count = await requestLogsCollection.countDocuments({
       ip,
       url,
-      date: { $gt: tenSecondsAgo },
+      date: { $gte: tenSecondsAgo },
     });
     if (count > 5) {
-      res.status(HttpStatus.TooManyRequests).send("Too many requests");
+      res.sendStatus(HttpStatus.TooManyRequests);
       return;
     } else {
       await requestLogsCollection.insertOne({ ip, url, date: now });
