@@ -19,7 +19,7 @@ export const requestLogMiddleware = async (
       date: { $gte: tenSecondsAgo },
     });
 
-    if (count > 5) {
+    if (count >= 5) {
       res.sendStatus(HttpStatus.TooManyRequests);
       await requestLogsCollection.deleteMany({});
       return;
