@@ -29,6 +29,7 @@ export const refreshService = {
       deviceId,
     );
     const iat = jwtService.getTokenIssuedAt(newRefreshToken).toISOString();
+    if (!iat) throw new Error("Can't extract issuedAt from new refresh token");
     await sessionDevicesService.updateLastActiveDate(payload.deviceId, iat);
     return {
       accessToken: newAccessToken,
