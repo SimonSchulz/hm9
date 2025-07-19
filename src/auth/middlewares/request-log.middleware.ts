@@ -9,7 +9,7 @@ export const requestLogMiddleware = async (
 ) => {
   try {
     const ip = req.ip?.toString() || "";
-    const url = req.path;
+    const url = req.originalUrl;
     const now = new Date();
     const tenSecondsAgo = new Date(now.getTime() - 10 * 1000);
 
@@ -19,9 +19,9 @@ export const requestLogMiddleware = async (
       date: { $gte: tenSecondsAgo },
     });
 
-    if (count >= 5) {
+    if (count > 5) {
       res.sendStatus(HttpStatus.TooManyRequests);
-      await requestLogsCollection.deleteMany();
+      await requestLogsCollection.deleteMany({});
       return;
     }
 
