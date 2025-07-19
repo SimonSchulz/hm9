@@ -9,7 +9,7 @@ export const requestLogMiddleware = async (
 ) => {
   try {
     const ip = req.ip?.toString() || "";
-    const url = req.baseUrl;
+    const url = req.originalUrl;
     const now = new Date();
     const tenSecondsAgo = new Date(now.getTime() - 10 * 1000);
     await requestLogsCollection.insertOne({ ip, url, date: now });

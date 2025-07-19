@@ -12,7 +12,7 @@ export async function refreshTokenGuard(
 
   const payload = await jwtService.verifyRefreshToken(refreshToken);
   if (!payload) throw new AuthorizationError();
-  const session = SessionDevicesQueryRepository.findSessionByDeviceId(
+  const session = await SessionDevicesQueryRepository.findSessionByDeviceId(
     payload.deviceId,
   );
   if (!session) throw new AuthorizationError();

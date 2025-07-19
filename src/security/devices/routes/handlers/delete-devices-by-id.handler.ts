@@ -24,10 +24,8 @@ export async function deleteDevicesByIdHandler(
     if (sessionToDelete.userId !== currentPayload.userId) {
       throw new ForbiddenError("Cannot delete session of another user");
     }
-
     await sessionDevicesService.deleteSessionByDeviceId(deviceIdToDelete);
-
-    res.sendStatus(HttpStatus.NoContent); // 204
+    res.sendStatus(HttpStatus.NoContent);
   } catch (e) {
     next(e);
   }
