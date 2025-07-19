@@ -21,7 +21,7 @@ export const requestLogMiddleware = async (
 
     if (count >= 5) {
       res.sendStatus(HttpStatus.TooManyRequests);
-      await requestLogsCollection.deleteMany({});
+      await requestLogsCollection.deleteMany({ url });
       return;
     }
 
