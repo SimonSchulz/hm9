@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthorizationError } from "../../../../core/utils/app-response-errors";
 import { sessionDevicesService } from "../../domain/session.devices.service";
-import { jwtService } from "../../../../auth/domain/jwt.service";
 import { HttpStatus } from "../../../../core/types/http-statuses";
 import { mapToDeviceViewModel } from "../mappers/map-to-devices-view-model";
 

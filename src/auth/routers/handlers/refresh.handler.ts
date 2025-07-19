@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { HttpStatus } from "../../../core/types/http-statuses";
 import { LoginSuccessViewModel } from "../../types/login-success-view-model";
-import { SETTINGS } from "../../../core/setting/setting";
 import { refreshService } from "../../domain/refresh.token.service";
-import { AuthorizationError } from "../../../core/utils/app-response-errors";
-import { refreshTokenRepository } from "../../Repositories/refresh.token.repo";
-import { jwtService } from "../../domain/jwt.service";
 import { sessionDevicesService } from "../../../security/devices/domain/session.devices.service";
 
 export async function refreshTokenHandler(
@@ -25,7 +21,6 @@ export async function refreshTokenHandler(
       .cookie("refreshToken", tokens.refreshToken, {
         httpOnly: true,
         secure: true,
-        maxAge: Number(SETTINGS.RF_TIME) * 1000,
       })
       .status(HttpStatus.Ok)
       .send({ accessToken: tokens.accessToken } as LoginSuccessViewModel);

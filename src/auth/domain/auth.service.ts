@@ -5,7 +5,6 @@ import { jwtService } from "./jwt.service";
 import { User } from "../../user/domain/user.entity";
 import { nodemailerService } from "./nodemailer.service";
 import { emailExamples } from "../utils/email-messages";
-import { refreshTokenRepository } from "../Repositories/refresh.token.repo";
 
 export const authService = {
   async loginUser(loginOrEmail: string, password: string) {

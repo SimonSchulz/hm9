@@ -4,7 +4,6 @@ import { LoginDto } from "../../dto/login.dto";
 import { authService } from "../../domain/auth.service";
 import { AuthorizationError } from "../../../core/utils/app-response-errors";
 import { LoginSuccessViewModel } from "../../types/login-success-view-model";
-import { SETTINGS } from "../../../core/setting/setting";
 import { sessionDevicesService } from "../../../security/devices/domain/session.devices.service";
 import { jwtService } from "../../domain/jwt.service";
 
@@ -34,7 +33,6 @@ export async function authLoginHandler(
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
-      maxAge: Number(SETTINGS.RF_TIME) * 1000,
     });
     res.status(HttpStatus.Ok).send({ accessToken } as LoginSuccessViewModel);
   } catch (e: unknown) {
