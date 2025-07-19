@@ -17,8 +17,6 @@ export async function refreshTokenHandler(
       refreshToken,
       payload.deviceId,
     );
-    const iat = jwtService.getTokenIssuedAt(tokens.refreshToken).toISOString();
-    await sessionDevicesService.updateLastActiveDate(payload.deviceId, iat);
     res
       .cookie("refreshToken", tokens.refreshToken, {
         httpOnly: true,

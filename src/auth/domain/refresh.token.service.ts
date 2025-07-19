@@ -1,6 +1,7 @@
 import { jwtService } from "./jwt.service";
 import { AuthorizationError } from "../../core/utils/app-response-errors";
 import { SessionDevicesQueryRepository } from "../../security/devices/repositories/session-query.repository";
+import { sessionDevicesService } from "../../security/devices/domain/session.devices.service";
 
 export const refreshService = {
   async refreshToken(oldRefreshToken: string, deviceId: string) {
@@ -27,12 +28,8 @@ export const refreshService = {
       userId,
       deviceId,
     );
-    const newExpiresAt = jwtService.getTokenExpiration(newRefreshToken);
-
-    if (!newExpiresAt) {
-      throw new Error("Can't extract expiration from new refresh token");
-    }
-
+    const iat = jwtService.getTokenIssuedAt(newRefreshToken).toISOString();
+    await sessionDevicesService.updateLastActiveDate(payload.deviceId, iat);
     return {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
